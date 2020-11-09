@@ -90,7 +90,7 @@ import (
 	baseapp "github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	data "github.com/regen-network/regen-ledger/x/data/module"
+	data "github.com/amaurymartiny/bec/x/blog/module"
 )
 
 const (

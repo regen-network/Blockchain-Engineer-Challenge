@@ -3,39 +3,34 @@ package server
 import (
 	"context"
 
+	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/gogo/protobuf/types"
 
 	"github.com/amaurymartiny/bec/x/blog"
 )
 
 var _ blog.QueryServer = serverImpl{}
 
-func (s serverImpl) AllPost(goCtx context.Context, request *blog.QueryAllPostRequest) (*blog.QueryAllPostResponse, error) {
+func (s serverImpl) AllPosts(goCtx context.Context, request *blog.QueryAllPostsRequest) (*blog.QueryAllPostsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	cid := request.Cid
+	store := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.PostKey))
+	iterator := sdk.KVStorePrefixIterator(store, blog.KeyPrefix(blog.PostKey))
 
-	var timestamp types.Timestamp
-	err := s.anchorTable.GetOne(ctx, cid, &timestamp)
-	if err != nil {
-		return nil, err
+	defer iterator.Close()
+
+	var posts []*blog.Post
+	for ; iterator.Valid(); iterator.Next() {
+		var msg blog.Post
+		err := s.cdc.UnmarshalBinaryBare(iterator.Value(), &msg)
+		if err != nil {
+			return nil, err
+		}
+
+		posts = append(posts, &msg)
 	}
 
-	var signers blog.Signers
-	// ignore error because we at least have the timestamp
-	_ = s.signersTable.GetOne(ctx, cid, &signers)
-
-	store := ctx.KVStore(s.storeKey)
-	content := store.Get(DataKey(cid))
-
-	return &blog.QueryAllPostResponse{
-		Timestamp: &timestamp,
-		Signers:   signers.Signers,
-		Content:   content,
-	}, err
-}
-
-func (s serverImpl) AllPost(goCtx context.Context, request *blog.QueryAllPostRequest) (*blog.QueryAllPostResponse, error) {
-	panic("implement me")
+	return &blog.QueryAllPostsResponse{
+		Posts: posts,
+	}, nil
 }

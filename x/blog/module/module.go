@@ -3,18 +3,18 @@ package module
 import (
 	"encoding/json"
 
-	"github.com/gorilla/mux"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/spf13/cobra"
-	abci "github.com/tendermint/tendermint/abci/types"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/gorilla/mux"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
+	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/amaurymartiny/bec/x/blog"
-	"github.com/amaurymartiny/bec/x/blog/client"
+	"github.com/amaurymartiny/bec/x/blog/client/cli"
 	"github.com/amaurymartiny/bec/x/blog/server"
 )
 
@@ -57,11 +57,11 @@ func (a AppModuleBasic) RegisterRESTRoutes(sdkclient.Context, *mux.Router) {}
 func (a AppModuleBasic) RegisterGRPCGatewayRoutes(sdkclient.Context, *runtime.ServeMux) {}
 
 func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return client.TxCmd()
+	return cli.GetTxCmd()
 }
 
 func (a AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return client.QueryCmd()
+	return cli.GetQueryCmd()
 }
 
 func (a AppModule) InitGenesis(sdk.Context, codec.JSONMarshaler, json.RawMessage) []abci.ValidatorUpdate {

@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/amaurymartiny/bec/cmd/becd/cmd"
+	"github.com/amaurymartiny/bec/app/becd/cmd"
 )
 
 func main() {

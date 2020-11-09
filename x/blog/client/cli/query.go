@@ -1,25 +1,23 @@
 package cli
 
 import (
-	"context"
 	"fmt"
 
 	// "strings"
 
+	"github.com/amaurymartiny/bec/x/blog"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-
-	"github.com/amaurymartiny/bec/x/blog/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module
-func GetQueryCmd(queryRoute string) *cobra.Command {
+func GetQueryCmd() *cobra.Command {
 	// Group glob queries under a subcommand
 	cmd := &cobra.Command{
-		Use:                        types.ModuleName,
-		Short:                      fmt.Sprintf("Querying commands for the %s module", types.ModuleName),
+		Use:                        blog.ModuleName,
+		Short:                      fmt.Sprintf("Querying commands for the %s module", blog.ModuleName),
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
@@ -46,13 +44,13 @@ func cmdListPost() *cobra.Command {
 				return err
 			}
 
-			queryClient := types.NewQueryClient(clientCtx)
+			queryClient := blog.NewQueryClient(clientCtx)
 
-			params := &types.QueryAllPostRequest{
+			params := &blog.QueryAllPostsRequest{
 				Pagination: pageReq,
 			}
 
-			res, err := queryClient.AllPost(context.Background(), params)
+			res, err := queryClient.AllPosts(cmd.Context(), params)
 			if err != nil {
 				return err
 			}

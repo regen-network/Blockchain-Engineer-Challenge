@@ -3,18 +3,14 @@ package blog.v1;
 
 option go_package = "github.com/amaurymartiny/bec/x/blog";
 
-import "gogoproto/gogo.proto";
-
 // Msg is the blog.v1 Msg service
 service Msg {
   rpc CreatePost(MsgCreatePostRequest) returns (MsgCreatePostResponse);
-
-  rpc CreateComment(MsgCreateCommentRequest) returns (MsgCreateCommentResponse);
 }
 
 // MsgCreatePostRequest is the Msg/CreatePost request type.
 message MsgCreatePostRequest {
-  bytes author = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string author = 1;
   string title = 2;
   string body = 3;
 }
@@ -24,14 +20,3 @@ message MsgCreatePostResponse {
   string id = 1;
 }
 
-// MsgCreateCommentRequest is the Msg/CreateComment request type.
-message MsgCreateCommentRequest {
-  bytes author = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
-  string posdId = 2;
-  string body = 3;
-}
-
-// MsgCreateCommentResponse is the Msg/CreateComment response type.
-message MsgCreateCommentResponse {
-  string id = 1;
-}
