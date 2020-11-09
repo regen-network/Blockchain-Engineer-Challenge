@@ -1,0 +1,35 @@
+syntax = "proto3";
+package blog.v1;
+
+option go_package = "github.com/amaurymartiny/bec/x/blog";
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "blog/v1/common.proto";
+
+// Query defines the gRPC querier service.
+service Query {
+	rpc AllPost(QueryAllPostRequest) returns (QueryAllPostResponse);
+	rpc AllComment(QueryAllCommentRequest) returns (QueryAllCommentResponse);
+}
+
+message QueryAllPostRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPostResponse {
+	repeated Post post = 1;
+
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryAllCommentRequest {
+	string postId = 1;
+
+	cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryAllCommentResponse {
+	repeated Comment comment = 1;
+
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

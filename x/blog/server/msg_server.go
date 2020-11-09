@@ -1,0 +1,1 @@
+var _ blog.MsgServer = serverImpl{}

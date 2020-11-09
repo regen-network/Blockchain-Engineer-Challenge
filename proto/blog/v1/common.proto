@@ -1,0 +1,21 @@
+syntax = "proto3";
+package blog.v1;
+
+option go_package = "github.com/amaurymartiny/bec/x/blog";
+
+import "gogoproto/gogo.proto";
+
+message Post {
+  string id = 1;
+  bytes author = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string title = 3;
+  string body = 4;
+}
+
+// MsgCreateCommentRequest is the Msg/CreateComment request type.
+message Comment {
+  string id = 1;
+  bytes author = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string title = 3;
+  string body = 4;
+}
