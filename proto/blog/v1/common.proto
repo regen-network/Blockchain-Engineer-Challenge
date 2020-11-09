@@ -1,7 +1,7 @@
 syntax = "proto3";
 package blog.v1;
 
-option go_package = "github.com/amaurymartiny/bec/x/blog";
+option go_package = "github.com/regen-network/bec/x/blog";
 
 
 message Post {

@@ -1,4 +1,4 @@
-module github.com/amaurymartiny/bec
+module github.com/regen-network/bec
 
 go 1.15
 

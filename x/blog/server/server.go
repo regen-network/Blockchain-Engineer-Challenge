@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/amaurymartiny/bec/x/blog"
+	"github.com/regen-network/bec/x/blog"
 )
 
 type serverImpl struct {

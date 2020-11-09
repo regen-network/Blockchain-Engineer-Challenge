@@ -13,9 +13,9 @@ import (
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/amaurymartiny/bec/x/blog"
-	"github.com/amaurymartiny/bec/x/blog/client/cli"
-	"github.com/amaurymartiny/bec/x/blog/server"
+	"github.com/regen-network/bec/x/blog"
+	"github.com/regen-network/bec/x/blog/client/cli"
+	"github.com/regen-network/bec/x/blog/server"
 )
 
 const (

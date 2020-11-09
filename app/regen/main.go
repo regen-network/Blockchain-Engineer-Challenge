@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/amaurymartiny/bec/app/regen/cmd"
+	"github.com/regen-network/bec/app/regen/cmd"
 )
 
 func main() {

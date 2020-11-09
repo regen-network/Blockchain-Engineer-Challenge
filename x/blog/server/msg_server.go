@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/uuid"
 
-	"github.com/amaurymartiny/bec/x/blog"
+	"github.com/regen-network/bec/x/blog"
 )
 
 var _ blog.MsgServer = serverImpl{}

@@ -6,7 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/amaurymartiny/bec/x/blog"
+	"github.com/regen-network/bec/x/blog"
 )
 
 var _ blog.QueryServer = serverImpl{}

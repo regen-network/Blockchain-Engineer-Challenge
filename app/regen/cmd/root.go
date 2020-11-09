@@ -9,7 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/simapp/params"
 	"github.com/cosmos/cosmos-sdk/snapshots"
-	"github.com/amaurymartiny/bec/app"
+	"github.com/regen-network/bec/app"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"

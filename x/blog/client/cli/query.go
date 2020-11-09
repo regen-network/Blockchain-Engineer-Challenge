@@ -5,7 +5,7 @@ import (
 
 	// "strings"
 
-	"github.com/amaurymartiny/bec/x/blog"
+	"github.com/regen-network/bec/x/blog"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"

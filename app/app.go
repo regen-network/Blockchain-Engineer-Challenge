@@ -87,7 +87,7 @@ import (
 	baseapp "github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	blog "github.com/amaurymartiny/bec/x/blog/module"
+	blog "github.com/regen-network/bec/x/blog/module"
 )
 
 const (
