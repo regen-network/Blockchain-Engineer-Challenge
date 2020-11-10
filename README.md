@@ -1,6 +1,6 @@
 # Blockchain Engineer Challenge
 
-This challenge consists of adding e new `commenting` functionality to `x/blog`, a demo Cosmos SDK module which allows to run a decentralized blog.
+This challenge consists of adding e new `commenting` functionality to `x/blog`, a demo Cosmos SDK module that can be used to run a decentralized blog.
 
 ## The Challenge
 
