@@ -27,10 +27,12 @@ type AppModuleBasic struct{}
 type AppModule struct {
 	AppModuleBasic
 	storeKey sdk.StoreKey
+
+	cdc codec.BinaryMarshaler
 }
 
-func NewAppModule(storeKey sdk.StoreKey) *AppModule {
-	return &AppModule{storeKey: storeKey}
+func NewAppModule(cdc codec.BinaryMarshaler, storeKey sdk.StoreKey) *AppModule {
+	return &AppModule{cdc: cdc, storeKey: storeKey}
 }
 
 var _ module.AppModule = AppModule{}
@@ -83,7 +85,7 @@ func (a AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
 }
 
 func (a AppModule) RegisterServices(configurator module.Configurator) {
-	server.RegisterServices(a.storeKey, configurator)
+	server.RegisterServices(a.cdc, a.storeKey, configurator)
 }
 
 func (a AppModule) BeginBlock(sdk.Context, abci.RequestBeginBlock) {

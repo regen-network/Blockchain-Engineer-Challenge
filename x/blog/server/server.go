@@ -13,14 +13,14 @@ type serverImpl struct {
 	storeKey sdk.StoreKey
 }
 
-func newServer(storeKey sdk.StoreKey) serverImpl {
+func newServer(cdc codec.BinaryMarshaler, storeKey sdk.StoreKey) serverImpl {
 	s := serverImpl{storeKey: storeKey}
 
 	return s
 }
 
-func RegisterServices(storeKey sdk.StoreKey, configurator module.Configurator) {
-	impl := newServer(storeKey)
+func RegisterServices(cdc codec.BinaryMarshaler, storeKey sdk.StoreKey, configurator module.Configurator) {
+	impl := newServer(cdc, storeKey)
 	blog.RegisterMsgServer(configurator.MsgServer(), impl)
 	blog.RegisterQueryServer(configurator.QueryServer(), impl)
 }

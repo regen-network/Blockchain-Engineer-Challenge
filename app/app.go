@@ -334,7 +334,7 @@ func NewRegenApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest 
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
-		blog.NewAppModule(keys[blog.StoreKey]),
+		blog.NewAppModule(appCodec, keys[blog.StoreKey]),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
