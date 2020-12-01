@@ -8,15 +8,15 @@ import "blog/v1/common.proto";
 
 // Query defines the gRPC querier service.
 service Query {
-	rpc AllPosts(QueryAllPostsRequest) returns (QueryAllPostsResponse);
+  rpc AllPosts(QueryAllPostsRequest) returns (QueryAllPostsResponse);
 }
 
 message QueryAllPostsRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
 message QueryAllPostsResponse {
-	repeated Post posts = 1;
+  repeated Post posts = 1;
 
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
