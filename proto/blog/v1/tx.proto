@@ -16,7 +16,4 @@ message MsgCreatePostRequest {
 }
 
 // MsgCreatePostRequest is the Msg/CreatePost response type.
-message MsgCreatePostResponse {
-  string id = 1;
-}
-
+message MsgCreatePostResponse { string id = 1; }
