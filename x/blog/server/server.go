@@ -14,7 +14,7 @@ type serverImpl struct {
 }
 
 func newServer(cdc codec.BinaryMarshaler, storeKey sdk.StoreKey) serverImpl {
-	s := serverImpl{storeKey: storeKey}
+	s := serverImpl{cdc: cdc, storeKey: storeKey}
 
 	return s
 }
