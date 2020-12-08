@@ -30,7 +30,7 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 		return nil, err
 	}
 
-	store.Set(blog.KeyPrefix(blog.PostKey), bz)
+	store.Set([]byte(id), bz)
 
 	return &blog.MsgCreatePostResponse{Id: id}, nil
 }

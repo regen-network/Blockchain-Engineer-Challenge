@@ -5,6 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
 
 	"github.com/regen-network/bec/x/blog"
@@ -20,24 +21,24 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	cmd.AddCommand(cmdCreatePost())
+	cmd.AddCommand(CmdCreatePost())
 
 	return cmd
 }
 
-func cmdCreatePost() *cobra.Command {
+func CmdCreatePost() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-post [title] [body]",
+		Use:   "create-post [author] [title] [body]",
 		Short: "Creates a new post",
-		Args:  cobra.MinimumNArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := cmd.Flags().Set(flags.FlagFrom, args[0])
 			if err != nil {
 				return err
 			}
 
-			argsTitle := string(args[0])
-			argsBody := string(args[1])
+			argsTitle := string(args[1])
+			argsBody := string(args[2])
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err = client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -57,7 +58,7 @@ func cmdCreatePost() *cobra.Command {
 				return err
 			}
 
-			return nil
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), svcMsgClientConn.Msgs...)
 		},
 	}
 

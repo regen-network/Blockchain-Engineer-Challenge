@@ -23,12 +23,12 @@ func GetQueryCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	cmd.AddCommand(cmdListPost())
+	cmd.AddCommand(CmdAllPosts())
 
 	return cmd
 }
 
-func cmdListPost() *cobra.Command {
+func CmdAllPosts() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list-post",
 		Short: "list all post",
@@ -60,6 +60,7 @@ func cmdListPost() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "blog")
 
 	return cmd
 }
