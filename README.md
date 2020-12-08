@@ -1,6 +1,6 @@
 # Blockchain Engineer Challenge
 
-This challenge consists of adding e new `commenting` functionality to `x/blog`, a demo Cosmos SDK module that can be used to run a decentralized blog.
+This challenge consists of adding a new `commenting` functionality to `x/blog`, a demo Cosmos SDK module that can be used to run a decentralized blog.
 
 ## The Challenge
 
@@ -25,7 +25,7 @@ Concretely, we would like to see the following components added:
 
 A good place to start learning about `x/blog` is the [`./proto/blog/v1`](./proto/blog/v1) folder. It contains 3 files:
 
-- `common.proto`: defines the shared messages that may be used in other files. We define inside it a `Post`, which represent a blog post. The `id` field is a string that represents an UUID, and the `author` field is a bech32-encoded address.
+- `common.proto`: defines the shared messages that may be used in other files. We define inside it a `Post`, which represents a blog post. The `id` field is a string that represents an UUID, and the `author` field is a bech32-encoded address.
 - `query.proto`: defines the `Query` service, or how to query the state. It contains for now a single method that allows to query all posts.
 - `tx.proto`: defines the `Msg` service, or how to handle state transitions. It contains for now a single method that allows to create a new `Post`.
 
