@@ -105,7 +105,7 @@ func (s *IntegrationTestSuite) TestCreatePost() {
 func (s *IntegrationTestSuite) TestDuplicateSlugs() {
 	val0 := s.network.Validators[0]
 	args := []string{
-		val0.Address.String(), "foo", "bar", "baz",
+		val0.Address.String(), "alice", "bob", "charlie",
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
@@ -139,7 +139,7 @@ func (s *IntegrationTestSuite) TestAllPosts() {
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
 	}
 
-	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo1", "bar1"))
+	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo1", "bar1", "baz1"))
 	s.Require().NoError(err)
 	var txRes1 sdk.TxResponse
 	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes1)
@@ -147,7 +147,7 @@ func (s *IntegrationTestSuite) TestAllPosts() {
 	s.Require().Equal(uint32(0), txRes1.Code)
 	s.Require().NoError(s.network.WaitForNextBlock())
 
-	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo2", "bar2"))
+	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo2", "bar2", "baz1"))
 	s.Require().NoError(err)
 	var txRes2 sdk.TxResponse
 	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes2)
