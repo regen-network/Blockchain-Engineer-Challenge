@@ -54,22 +54,27 @@ func (s *IntegrationTestSuite) TestCreatePost() {
 	}{
 		{
 			"no author",
-			[]string{"", "", ""},
+			[]string{"", "foo", "bar", "baz"},
 			true, "no author",
 		},
 		{
+			"no slug",
+			[]string{val0.Address.String(), "", "bar", "baz"},
+			true, "no slug",
+		},
+		{
 			"no title",
-			[]string{val0.Address.String(), "", "bar"},
+			[]string{val0.Address.String(), "foo", "", "baz"},
 			true, "no title",
 		},
 		{
 			"no body",
-			[]string{val0.Address.String(), "foo", ""},
+			[]string{val0.Address.String(), "foo", "bar", ""},
 			true, "no body",
 		},
 		{
 			"valid request",
-			[]string{val0.Address.String(), "foo", "bar", fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation)},
+			[]string{val0.Address.String(), "foo", "bar", "baz"},
 			false, "",
 		},
 	}
@@ -95,6 +100,32 @@ func (s *IntegrationTestSuite) TestCreatePost() {
 			}
 		})
 	}
+}
+
+func (s *IntegrationTestSuite) TestDuplicateSlugs() {
+	val0 := s.network.Validators[0]
+	args := []string{
+		val0.Address.String(), "foo", "bar", "baz",
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
+	cmd := cli.CmdCreatePost()
+
+	// Send the first time.
+	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, args)
+	s.Require().NoError(err)
+	var txRes sdk.TxResponse
+	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes)
+	s.Require().NoError(err)
+	s.Require().Equal(uint32(0), txRes.Code)
+
+	// Send the second time.
+	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, args)
+	s.Require().NoError(err)
+	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes)
+	s.Require().NoError(err)
+	s.Require().NotEqual(uint32(0), txRes.Code)
 }
 
 func (s *IntegrationTestSuite) TestAllPosts() {
