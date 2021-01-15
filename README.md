@@ -9,11 +9,11 @@ At its current state in this repo, `x/blog` allows users to create blog posts an
 Concretely, we would like to see the following components added:
 
 - The addition of a new `Msg` service method called `CreateComment`. This method's input should take:
-  - `postId` as string,
+  - `postSlug` as string,
   - `author` as string (Bech32-encoded address),
   - `body` as string.
 - New comments should be persisted to the blockchain state. A comment cannot be inserted into state if its corresponding `Post` does not exist in state.
-- The addition of a new `AllComments` gRPC query method. This method's input should take a `postId` (a string), and returns all the comments on a post.
+- The addition of a new `AllComments` gRPC query method. This method's input should take a `postSlug` (a string), and returns all the comments on a post.
 - The addition of two CLI subcommands, `tx create-comment` and `query list-comments`, which call the `CreateComment` and `AllComments` service methods under the hood.
 
 ## Requirements:
@@ -25,7 +25,7 @@ Concretely, we would like to see the following components added:
 
 A good place to start learning about `x/blog` is the [`./proto/blog/v1`](./proto/blog/v1) folder. It contains 3 files:
 
-- `common.proto`: defines the shared messages that may be used in other files. We define inside it a `Post`, which represents a blog post. The `id` field is a string that represents an UUID, and the `author` field is a bech32-encoded address.
+- `common.proto`: defines the shared messages that may be used in other files. We define inside it a `Post`, which represents a blog post. The `slug` field is a string that represents a human-readable identifier for each post (see [definition](https://yoast.com/slug/)), and the `author` field is a bech32-encoded address.
 - `query.proto`: defines the `Query` service, or how to query the state. It contains for now a single method that allows to query all posts.
 - `tx.proto`: defines the `Msg` service, or how to handle state transitions. It contains for now a single method that allows to create a new `Post`.
 
