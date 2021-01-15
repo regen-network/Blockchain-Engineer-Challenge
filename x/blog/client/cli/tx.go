@@ -28,26 +28,27 @@ func GetTxCmd() *cobra.Command {
 
 func CmdCreatePost() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-post [author] [title] [body]",
+		Use:   "create-post [author] [slug] [title] [body]",
 		Short: "Creates a new post",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := cmd.Flags().Set(flags.FlagFrom, args[0])
 			if err != nil {
 				return err
 			}
 
-			argsTitle := string(args[1])
-			argsBody := string(args[2])
+			argsSlug := string(args[1])
+			argsTitle := string(args[2])
+			argsBody := string(args[3])
 
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err = client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
 			msg := blog.MsgCreatePostRequest{
 				Author: clientCtx.GetFromAddress().String(),
+				Slug:   argsSlug,
 				Title:  argsTitle,
 				Body:   argsBody,
 			}

@@ -16,6 +16,9 @@ func (m *MsgCreatePostRequest) ValidateBasic() error {
 	if m.Body == "" {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no body")
 	}
+	if m.Slug == "" {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no slug")
+	}
 	if m.Title == "" {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no title")
 	}

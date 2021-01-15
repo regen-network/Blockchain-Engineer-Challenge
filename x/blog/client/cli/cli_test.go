@@ -54,22 +54,27 @@ func (s *IntegrationTestSuite) TestCreatePost() {
 	}{
 		{
 			"no author",
-			[]string{"", "", ""},
+			[]string{"", "foo", "bar", "baz"},
 			true, "no author",
 		},
 		{
+			"no slug",
+			[]string{val0.Address.String(), "", "bar", "baz"},
+			true, "no slug",
+		},
+		{
 			"no title",
-			[]string{val0.Address.String(), "", "bar"},
+			[]string{val0.Address.String(), "foo", "", "baz"},
 			true, "no title",
 		},
 		{
 			"no body",
-			[]string{val0.Address.String(), "foo", ""},
+			[]string{val0.Address.String(), "foo", "bar", ""},
 			true, "no body",
 		},
 		{
 			"valid request",
-			[]string{val0.Address.String(), "foo", "bar", fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation)},
+			[]string{val0.Address.String(), "foo", "bar", "baz"},
 			false, "",
 		},
 	}
@@ -97,6 +102,32 @@ func (s *IntegrationTestSuite) TestCreatePost() {
 	}
 }
 
+func (s *IntegrationTestSuite) TestDuplicateSlugs() {
+	val0 := s.network.Validators[0]
+	args := []string{
+		val0.Address.String(), "alice", "bob", "charlie",
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
+	}
+	cmd := cli.CmdCreatePost()
+
+	// Send the first time.
+	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, args)
+	s.Require().NoError(err)
+	var txRes sdk.TxResponse
+	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes)
+	s.Require().NoError(err)
+	s.Require().Equal(uint32(0), txRes.Code)
+
+	// Send the second time.
+	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, args)
+	s.Require().NoError(err)
+	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes)
+	s.Require().NoError(err)
+	s.Require().NotEqual(uint32(0), txRes.Code)
+}
+
 func (s *IntegrationTestSuite) TestAllPosts() {
 	val0 := s.network.Validators[0]
 
@@ -108,7 +139,7 @@ func (s *IntegrationTestSuite) TestAllPosts() {
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(10))).String()),
 	}
 
-	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo1", "bar1"))
+	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo1", "bar1", "baz1"))
 	s.Require().NoError(err)
 	var txRes1 sdk.TxResponse
 	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes1)
@@ -116,7 +147,7 @@ func (s *IntegrationTestSuite) TestAllPosts() {
 	s.Require().Equal(uint32(0), txRes1.Code)
 	s.Require().NoError(s.network.WaitForNextBlock())
 
-	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo2", "bar2"))
+	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo2", "bar2", "baz1"))
 	s.Require().NoError(err)
 	var txRes2 sdk.TxResponse
 	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes2)

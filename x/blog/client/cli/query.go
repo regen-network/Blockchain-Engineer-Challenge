@@ -33,11 +33,7 @@ func CmdAllPosts() *cobra.Command {
 		Use:   "list-post",
 		Short: "list all post",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
-			if err != nil {
-				return err
-			}
+			clientCtx, err := client.GetClientQueryContext(cmd)
 
 			pageReq, err := client.ReadPageRequest(cmd.Flags())
 			if err != nil {
@@ -55,7 +51,7 @@ func CmdAllPosts() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintOutput(res)
+			return clientCtx.PrintProto(res)
 		},
 	}
 

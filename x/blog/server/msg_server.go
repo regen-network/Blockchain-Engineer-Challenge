@@ -5,7 +5,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/regen-network/bec/x/blog"
 )
@@ -17,10 +17,14 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 
 	store := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.PostKey))
 
-	id := uuid.New().String()
+	key := []byte(request.Slug)
+	if store.Has(key) {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "duplicate slug %s found", request.Slug)
+	}
+
 	post := blog.Post{
-		Id:     id,
 		Author: request.Author,
+		Slug:   request.Slug,
 		Title:  request.Title,
 		Body:   request.Body,
 	}
@@ -30,7 +34,7 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 		return nil, err
 	}
 
-	store.Set([]byte(id), bz)
+	store.Set(key, bz)
 
-	return &blog.MsgCreatePostResponse{Id: id}, nil
+	return &blog.MsgCreatePostResponse{}, nil
 }
