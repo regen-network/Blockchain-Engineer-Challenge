@@ -9,11 +9,11 @@ At its current state in this repo, `x/blog` allows users to create blog posts an
 Concretely, we would like to see the following components added:
 
 - The addition of a new `Msg` service method called `CreateComment`. This method's input should take:
-  - `postSlug` as string,
+  - `post_slug` as string,
   - `author` as string (Bech32-encoded address),
   - `body` as string.
 - New comments should be persisted to the blockchain state. A comment cannot be inserted into state if its corresponding `Post` does not exist in state.
-- The addition of a new `AllComments` gRPC query method. This method's input should take a `postSlug` (a string), and returns all the comments on a post.
+- The addition of a new `AllComments` gRPC query method. This method's input should take a `post_slug` (a string), and returns all the comments on a post.
 - The addition of two CLI subcommands, `tx create-comment` and `query list-comments`, which call the `CreateComment` and `AllComments` service methods under the hood.
 
 ## Requirements:
