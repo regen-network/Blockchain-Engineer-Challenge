@@ -9,7 +9,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/regen-network/bec/app"
 	"github.com/regen-network/bec/testutil/network"
 	"github.com/regen-network/bec/x/blog"
 	"github.com/regen-network/bec/x/blog/client/cli"
@@ -17,9 +16,6 @@ import (
 
 type IntegrationTestSuite struct {
 	suite.Suite
-
-	app *app.RegenApp
-	ctx sdk.Context
 
 	cfg     network.Config
 	network *network.Network
