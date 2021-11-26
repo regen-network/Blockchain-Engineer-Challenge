@@ -20,5 +20,3 @@ jobs:
         run: go version
       - name: make build
         run: make build
-      - name: make experimental build
-        run: EXPERIMENTAL=true make build
