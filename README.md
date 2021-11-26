@@ -67,13 +67,13 @@ To run the node, you can refer to the documentation [here](https://docs.cosmos.n
 
 ## Resources
 
-- Cosmos SDK Documentation: https://docs.cosmos.network/master/. Be sure to use the `/master` prefix, as the docs on `/` are for 0.39. Also, documentation for 0.40 is still work in progress, so there might be outdated content.
+- Cosmos SDK Documentation: https://docs.cosmos.network/master/.
 - Having a look at how existing modules are implemented can help. Here are the modules we're currently maintaining inside `regen-ledger`: https://github.com/regen-network/regen-ledger/tree/master/x.
 - Ask us questions! Shoot us an email, or talk to us on [Discord](https://discord.gg/stujhkkhvk), if you need help.
 
 ## Submission
 
-For submission, please send us an email with a link to your project, ideally as a Github repo. Oh, and don't forget to add a nice README.md so we know how to build & run it :)
+For submission, please send us an email with a link to your project, ideally as a Github repo. Oh, and don't forget to add a nice README.md (or edit this one) so we know how to build & run it, and what changes you made :)
 
 ## Additional Information
 
