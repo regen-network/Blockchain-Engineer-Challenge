@@ -21,7 +21,7 @@ func (s serverImpl) AllPosts(goCtx context.Context, request *blog.QueryAllPostsR
 	var posts []*blog.Post
 	for ; iterator.Valid(); iterator.Next() {
 		var msg blog.Post
-		err := s.cdc.UnmarshalBinaryBare(iterator.Value(), &msg)
+		err := s.cdc.Unmarshal(iterator.Value(), &msg)
 		if err != nil {
 			return nil, err
 		}

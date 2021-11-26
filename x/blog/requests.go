@@ -6,10 +6,10 @@ import (
 )
 
 var (
-	_ sdk.MsgRequest = &MsgCreatePostRequest{}
+	_ sdk.Msg = &MsgCreatePost{}
 )
 
-func (m *MsgCreatePostRequest) ValidateBasic() error {
+func (m *MsgCreatePost) ValidateBasic() error {
 	if m.Author == "" {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no author")
 	}
@@ -26,7 +26,7 @@ func (m *MsgCreatePostRequest) ValidateBasic() error {
 	return nil
 }
 
-func (m *MsgCreatePostRequest) GetSigners() []sdk.AccAddress {
+func (m *MsgCreatePost) GetSigners() []sdk.AccAddress {
 	addr, err := sdk.AccAddressFromBech32(m.Author)
 	if err != nil {
 		panic(err)

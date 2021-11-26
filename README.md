@@ -18,14 +18,14 @@ Concretely, we would like to see the following components added:
 
 ## Requirements:
 
-- Go v1.15+: https://golang.org/
+- Go v1.17+: https://golang.org/
 - Docker: https://www.docker.com/
 
 ## Getting Started with `x/blog`
 
 A good place to start learning about `x/blog` is the [`./proto/blog/v1`](./proto/blog/v1) folder. It contains 3 files:
 
-- `common.proto`: defines the shared messages that may be used in other files. We define inside it a `Post`, which represents a blog post. The `slug` field is a string that represents a human-readable identifier for each post (see [definition](https://yoast.com/slug/)), and the `author` field is a bech32-encoded address.
+- `types.proto`: defines the shared messages that may be used in other files. We define inside it a `Post`, which represents a blog post. The `slug` field is a string that represents a human-readable identifier for each post (see [definition](https://yoast.com/slug/)), and the `author` field is a bech32-encoded address.
 - `query.proto`: defines the `Query` service, or how to query the state. It contains for now a single method that allows to query all posts.
 - `tx.proto`: defines the `Msg` service, or how to handle state transitions. It contains for now a single method that allows to create a new `Post`.
 

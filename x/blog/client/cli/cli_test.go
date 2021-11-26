@@ -94,7 +94,7 @@ func (s *IntegrationTestSuite) TestCreatePost() {
 				s.Require().Contains(err.Error(), tc.expErrMsg)
 			} else {
 				var txRes sdk.TxResponse
-				err := val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes)
+				err := val0.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes)
 				s.Require().NoError(err)
 				s.Require().Equal(uint32(0), txRes.Code)
 			}
@@ -116,14 +116,14 @@ func (s *IntegrationTestSuite) TestDuplicateSlugs() {
 	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, args)
 	s.Require().NoError(err)
 	var txRes sdk.TxResponse
-	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes)
+	err = val0.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes)
 	s.Require().NoError(err)
 	s.Require().Equal(uint32(0), txRes.Code)
 
 	// Send the second time.
 	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, args)
 	s.Require().NoError(err)
-	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes)
+	err = val0.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes)
 	s.Require().NoError(err)
 	s.Require().NotEqual(uint32(0), txRes.Code)
 }
@@ -142,7 +142,7 @@ func (s *IntegrationTestSuite) TestAllPosts() {
 	out, err := clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo1", "bar1", "baz1"))
 	s.Require().NoError(err)
 	var txRes1 sdk.TxResponse
-	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes1)
+	err = val0.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes1)
 	s.Require().NoError(err)
 	s.Require().Equal(uint32(0), txRes1.Code)
 	s.Require().NoError(s.network.WaitForNextBlock())
@@ -150,7 +150,7 @@ func (s *IntegrationTestSuite) TestAllPosts() {
 	out, err = clitestutil.ExecTestCLICmd(val0.ClientCtx, cmd, append(defaultArgs, val0.Address.String(), "foo2", "bar2", "baz1"))
 	s.Require().NoError(err)
 	var txRes2 sdk.TxResponse
-	err = val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &txRes2)
+	err = val0.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &txRes2)
 	s.Require().NoError(err)
 	s.Require().Equal(uint32(0), txRes2.Code)
 	s.Require().NoError(s.network.WaitForNextBlock())
@@ -178,7 +178,7 @@ func (s *IntegrationTestSuite) TestAllPosts() {
 				s.Require().Contains(err.Error(), tc.expErrMsg)
 			} else {
 				var res = blog.QueryAllPostsResponse{}
-				err := val0.ClientCtx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &res)
+				err := val0.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &res)
 				s.Require().NoError(err)
 				s.Require().Equal(tc.expNumPosts, len(res.Posts))
 			}
