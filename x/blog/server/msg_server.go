@@ -12,7 +12,7 @@ import (
 
 var _ blog.MsgServer = serverImpl{}
 
-func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePostRequest) (*blog.MsgCreatePostResponse, error) {
+func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePost) (*blog.MsgCreatePostResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	store := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.PostKey))
@@ -29,7 +29,7 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 		Body:   request.Body,
 	}
 
-	bz, err := s.cdc.MarshalBinaryBare(&post)
+	bz, err := s.cdc.Marshal(&post)
 	if err != nil {
 		return nil, err
 	}

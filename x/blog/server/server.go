@@ -9,17 +9,17 @@ import (
 )
 
 type serverImpl struct {
-	cdc      codec.BinaryMarshaler
+	cdc      codec.Codec
 	storeKey sdk.StoreKey
 }
 
-func newServer(cdc codec.BinaryMarshaler, storeKey sdk.StoreKey) serverImpl {
+func newServer(cdc codec.Codec, storeKey sdk.StoreKey) serverImpl {
 	s := serverImpl{cdc: cdc, storeKey: storeKey}
 
 	return s
 }
 
-func RegisterServices(cdc codec.BinaryMarshaler, storeKey sdk.StoreKey, configurator module.Configurator) {
+func RegisterServices(cdc codec.Codec, storeKey sdk.StoreKey, configurator module.Configurator) {
 	impl := newServer(cdc, storeKey)
 	blog.RegisterMsgServer(configurator.MsgServer(), impl)
 	blog.RegisterQueryServer(configurator.QueryServer(), impl)

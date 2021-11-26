@@ -28,10 +28,10 @@ type AppModule struct {
 	AppModuleBasic
 	storeKey sdk.StoreKey
 
-	cdc codec.BinaryMarshaler
+	cdc codec.Codec
 }
 
-func NewAppModule(cdc codec.BinaryMarshaler, storeKey sdk.StoreKey) *AppModule {
+func NewAppModule(cdc codec.Codec, storeKey sdk.StoreKey) *AppModule {
 	return &AppModule{cdc: cdc, storeKey: storeKey}
 }
 
@@ -46,11 +46,11 @@ func (a AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry
 	blog.RegisterTypes(registry)
 }
 
-func (a AppModuleBasic) DefaultGenesis(codec.JSONMarshaler) json.RawMessage {
+func (a AppModuleBasic) DefaultGenesis(codec.JSONCodec) json.RawMessage {
 	return nil
 }
 
-func (a AppModuleBasic) ValidateGenesis(codec.JSONMarshaler, sdkclient.TxEncodingConfig, json.RawMessage) error {
+func (a AppModuleBasic) ValidateGenesis(codec.JSONCodec, sdkclient.TxEncodingConfig, json.RawMessage) error {
 	return nil
 }
 
@@ -66,11 +66,11 @@ func (a AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return cli.GetQueryCmd()
 }
 
-func (a AppModule) InitGenesis(sdk.Context, codec.JSONMarshaler, json.RawMessage) []abci.ValidatorUpdate {
+func (a AppModule) InitGenesis(sdk.Context, codec.JSONCodec, json.RawMessage) []abci.ValidatorUpdate {
 	return nil
 }
 
-func (a AppModule) ExportGenesis(sdk.Context, codec.JSONMarshaler) json.RawMessage {
+func (a AppModule) ExportGenesis(sdk.Context, codec.JSONCodec) json.RawMessage {
 	return nil
 }
 
@@ -94,3 +94,5 @@ func (a AppModule) BeginBlock(sdk.Context, abci.RequestBeginBlock) {
 func (a AppModule) EndBlock(sdk.Context, abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return nil
 }
+
+func (a AppModule) ConsensusVersion() uint64 { return 1 }

@@ -46,20 +46,14 @@ func CmdCreatePost() *cobra.Command {
 				return err
 			}
 
-			msg := blog.MsgCreatePostRequest{
+			msg := &blog.MsgCreatePost{
 				Author: clientCtx.GetFromAddress().String(),
 				Slug:   argsSlug,
 				Title:  argsTitle,
 				Body:   argsBody,
 			}
-			svcMsgClientConn := &ServiceMsgClientConn{}
-			msgClient := blog.NewMsgClient(svcMsgClientConn)
-			_, err = msgClient.CreatePost(cmd.Context(), &msg)
-			if err != nil {
-				return err
-			}
 
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), svcMsgClientConn.Msgs...)
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
