@@ -4,7 +4,7 @@ package blog.v1;
 option go_package = "github.com/regen-network/bec/x/blog";
 
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "blog/v1/common.proto";
+import "blog/v1/types.proto";
 
 // Query defines the gRPC querier service.
 service Query {
