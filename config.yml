@@ -1,0 +1,13 @@
+accounts:
+  - name: alice
+    mnemonic: "slide moment original seven milk crawl help text kick fluid boring awkward doll wonder sure fragile plate grid hard next casual expire okay body"
+    coins: [ "20000token", "200000000stake" ]
+  - name: bob
+    mnemonic: "trap possible liquid elite embody host segment fantasy swim cable digital eager tiny broom burden diary earn hen grow engine pigeon fringe claim program"
+    coins: [ "20000token", "200000000stake" ]
+validator:
+  name: alice
+  staked: "100000000stake"
+faucet:
+  name: bob
+  coins: [ "20000token", "200000000stake" ]
