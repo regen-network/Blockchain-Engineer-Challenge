@@ -38,3 +38,33 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 
 	return &blog.MsgCreatePostResponse{}, nil
 }
+
+func (s serverImpl) CreateComment(goCtx context.Context, request *blog.MsgCreateComment) (*blog.MsgCreateCommentResponse, error) {
+	var (
+		ctx       = sdk.UnwrapSDKContext(goCtx)
+		key       = blog.CommentKey(request.PostSlug, request.Author, request.Body)
+		store     = prefix.NewStore(ctx.KVStore(s.storeKey), blog.CommentAllKey(request.PostSlug))
+		postStore = prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.PostKey))
+	)
+	if !postStore.Has([]byte(request.PostSlug)) {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "post %s not found", request.PostSlug)
+	}
+
+	comment := blog.Comment{
+		Author:   request.Author,
+		PostSlug: request.PostSlug,
+		Body:     request.Body,
+	}
+	if postStore.Has(key) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "duplicated comment")
+	}
+
+	bz, err := s.cdc.Marshal(&comment)
+	if err != nil {
+		return nil, err
+	}
+
+	store.Set(key, bz)
+
+	return &blog.MsgCreateCommentResponse{}, nil
+}
