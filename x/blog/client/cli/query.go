@@ -1,10 +1,7 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
-
-	// "strings"
 
 	"github.com/regen-network/bec/x/blog"
 	"github.com/spf13/cobra"
@@ -36,6 +33,7 @@ func CmdAllPosts() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list-post",
 		Short: "list all post",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -72,11 +70,9 @@ func CmdAllComments() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list-comment [post-slug]",
 		Short: "list all comment",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsPostSlug := args[0]
-			if argsPostSlug == "" {
-				return errors.New("invalid post slug")
-			}
 
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
