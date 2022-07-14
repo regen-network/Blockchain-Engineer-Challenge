@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 
 	// "strings"
@@ -23,7 +24,10 @@ func GetQueryCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	cmd.AddCommand(CmdAllPosts())
+	cmd.AddCommand(
+		CmdAllPosts(),
+		CmdAllComments(),
+	)
 
 	return cmd
 }
@@ -50,6 +54,48 @@ func CmdAllPosts() *cobra.Command {
 			}
 
 			res, err := queryClient.AllPosts(cmd.Context(), params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "blog")
+
+	return cmd
+}
+
+func CmdAllComments() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "list-comment [post-slug]",
+		Short: "list all comment",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			argsPostSlug := args[0]
+			if argsPostSlug == "" {
+				return errors.New("invalid post slug")
+			}
+
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			queryClient := blog.NewQueryClient(clientCtx)
+
+			params := &blog.QueryAllCommentsRequest{
+				PostSlug:   argsPostSlug,
+				Pagination: pageReq,
+			}
+
+			res, err := queryClient.AllComments(cmd.Context(), params)
 			if err != nil {
 				return err
 			}
