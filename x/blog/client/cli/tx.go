@@ -21,7 +21,10 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	cmd.AddCommand(CmdCreatePost())
+	cmd.AddCommand(
+		CmdCreatePost(),
+		CmdCreateComment(),
+	)
 
 	return cmd
 }
@@ -37,9 +40,11 @@ func CmdCreatePost() *cobra.Command {
 				return err
 			}
 
-			argsSlug := string(args[1])
-			argsTitle := string(args[2])
-			argsBody := string(args[3])
+			var (
+				argsSlug  = args[1]
+				argsTitle = args[2]
+				argsBody  = args[3]
+			)
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -51,6 +56,48 @@ func CmdCreatePost() *cobra.Command {
 				Slug:   argsSlug,
 				Title:  argsTitle,
 				Body:   argsBody,
+			}
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func CmdCreateComment() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "create-comment [author] [post-slug] [body]",
+		Short: "Creates a new comment",
+		Args:  cobra.ExactArgs(3),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			err := cmd.Flags().Set(flags.FlagFrom, args[0])
+			if err != nil {
+				return err
+			}
+
+			var (
+				argsPostSlug = args[1]
+				argsBody     = args[2]
+			)
+
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := &blog.MsgCreateComment{
+				Author:   clientCtx.GetFromAddress().String(),
+				PostSlug: argsPostSlug,
+				Body:     argsBody,
+			}
+			if err := msg.ValidateBasic(); err != nil {
+				return err
 			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
