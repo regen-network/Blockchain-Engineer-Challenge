@@ -104,6 +104,7 @@ $(BUILD_TARGETS): go.sum $(BUILDDIR)/
 $(BUILDDIR)/:
 	mkdir -p $(BUILDDIR)/
 
+
 .PHONY: build $(BUILD_TARGETS) $(BUILDDIR)/
 
 ###############################################################################
@@ -178,3 +179,6 @@ proto-gen:
 	$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace tendermintdev/sdk-proto-gen sh ./scripts/protocgen.sh
 
 .PHONY: proto-gen
+
+localnet:
+	./scripts/localnet.sh

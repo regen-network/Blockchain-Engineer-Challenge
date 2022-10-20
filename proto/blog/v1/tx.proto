@@ -6,6 +6,7 @@ option go_package = "github.com/regen-network/bec/x/blog";
 // Msg is the blog.v1 Msg service
 service Msg {
   rpc CreatePost(MsgCreatePost) returns (MsgCreatePostResponse);
+  rpc CreateComment(MsgCreateComment) returns (MsgCreateCommentResponse);
 }
 
 // MsgCreatePost is the Msg/CreatePost request type.
@@ -18,3 +19,14 @@ message MsgCreatePost {
 
 // MsgCreatePostResponse is the Msg/CreatePost response type.
 message MsgCreatePostResponse {}
+
+
+// MsgCreateComment is the Msg/CreateComment request type.
+message MsgCreateComment {
+  string post_slug = 1;
+  string author = 2;
+  string body = 3;
+}
+
+// MsgCreateCommentResponse is the Msg/CreateComment response type.
+message MsgCreateCommentResponse {}
