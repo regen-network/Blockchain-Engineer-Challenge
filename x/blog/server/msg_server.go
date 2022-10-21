@@ -42,7 +42,12 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 func (s serverImpl) CreateComment(goCtx context.Context, request *blog.MsgCreateComment) (*blog.MsgCreateCommentResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	store := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.CommentKey))
+	storeComments := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.CommentKey))
+	storePosts := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.PostKey))
+
+	if !storePosts.Has([]byte(request.PostSlug)) {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Post with slug %s not found", request.PostSlug)
+	}
 
 	comment := blog.Comment{
 		PostSlug: request.PostSlug,
@@ -56,7 +61,7 @@ func (s serverImpl) CreateComment(goCtx context.Context, request *blog.MsgCreate
 	}
 
 	key := xid.New().Bytes()
-	store.Set(key, bz)
+	storeComments.Set(key, bz)
 
 	return &blog.MsgCreateCommentResponse{}, nil
 }
