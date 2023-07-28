@@ -38,3 +38,29 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 
 	return &blog.MsgCreatePostResponse{}, nil
 }
+
+func (s serverImpl) CreateComment(goCtx context.Context, request *blog.MsgCreateComment) (*blog.MsgCreateCommentResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	store := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.CommentKey))
+
+	key := []byte(request.PostSlug)
+	if store.Has(key) {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "duplicate slug %s found", request.PostSlug)
+	}
+
+	comment := blog.Comment{
+		Author:   request.Author,
+		PostSlug: request.PostSlug,
+		Body:     request.Body,
+	}
+
+	bz, err := s.cdc.Marshal(&comment)
+	if err != nil {
+		return nil, err
+	}
+
+	store.Set(key, bz)
+
+	return &blog.MsgCreateCommentResponse{}, nil
+}
