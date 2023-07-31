@@ -11,3 +11,12 @@ message Post {
   string title = 3;
   string body = 4;
 }
+
+message Comment {
+  // slug is a short human-readable string for the post, used as unique
+  // identifier for the post.
+  string slug = 1;
+  string author = 2;
+  string body = 3;
+}
+
