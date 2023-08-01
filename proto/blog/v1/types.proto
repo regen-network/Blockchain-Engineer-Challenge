@@ -11,3 +11,11 @@ message Post {
   string title = 3;
   string body = 4;
 }
+
+message PostComment {
+  // slug is a short human-readable string used in commect for connecting with post.
+  // Used as unique.
+  string slug = 1;
+  string author = 2;
+  string body = 3;
+}
