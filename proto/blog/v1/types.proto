@@ -11,3 +11,9 @@ message Post {
   string title = 3;
   string body = 4;
 }
+
+message Comment {
+  string post_slug = 1;
+  string author = 2;
+  string body = 3;
+}
