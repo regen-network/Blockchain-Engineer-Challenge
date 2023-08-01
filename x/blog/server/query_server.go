@@ -38,7 +38,7 @@ func (s serverImpl) AllComments(goCtx context.Context, request *blog.QueryAllCom
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	store := ctx.KVStore(s.storeKey)
-	iterator := sdk.KVStorePrefixIterator(store, blog.KeyPrefix(blog.CommentKey))
+	iterator := sdk.KVStorePrefixIterator(store, blog.KeyPrefix(request.PostSlug))
 
 	defer iterator.Close()
 

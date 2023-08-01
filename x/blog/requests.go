@@ -34,3 +34,25 @@ func (m *MsgCreatePost) GetSigners() []sdk.AccAddress {
 
 	return []sdk.AccAddress{addr}
 }
+
+func (m *MsgCreateComment) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(m.Author)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{addr}
+}
+func (m *MsgCreateComment) ValidateBasic() error {
+	if m.Author == "" {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no author")
+	}
+	if m.Body == "" {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no body")
+	}
+	if m.PostSlug == "" {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no PostSlug")
+	}
+
+	return nil
+}

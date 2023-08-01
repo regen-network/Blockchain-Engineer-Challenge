@@ -61,3 +61,38 @@ func CmdCreatePost() *cobra.Command {
 
 	return cmd
 }
+
+func CmdCreateComment() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "create-comment [author] [post_slug] [body]",
+		Short: "Creates a new comment",
+		Args:  cobra.ExactArgs(4),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			err := cmd.Flags().Set(flags.FlagFrom, args[0])
+			if err != nil {
+				return err
+			}
+
+			argsAuthor := string(args[0])
+			argsPostSlug := string(args[1])
+			argsBody := string(args[2])
+
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			msg := &blog.MsgCreateComment{
+				Author:   argsAuthor,
+				PostSlug: argsPostSlug,
+				Body:     argsBody,
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}

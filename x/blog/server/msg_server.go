@@ -6,6 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/google/uuid"
 
 	"github.com/regen-network/bec/x/blog"
 )
@@ -42,11 +43,13 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 func (s serverImpl) CreateComment(goCtx context.Context, request *blog.MsgCreateComment) (*blog.MsgCreateCommentResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	store := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.CommentKey))
+	store := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(request.PostSlug))
+	var commentId = uuid.NewString()
 
-	key := []byte(request.PostSlug)
+	strKey := request.PostSlug + "_" + string(commentId)
+	key := []byte(strKey)
 	if store.Has(key) {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "duplicate slug %s found", request.PostSlug)
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "duplicate comment wtih key %s found", strKey)
 	}
 
 	comment := blog.Comment{
