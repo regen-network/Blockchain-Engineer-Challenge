@@ -9,6 +9,7 @@ import "blog/v1/types.proto";
 // Query defines the gRPC querier service.
 service Query {
   rpc AllPosts(QueryAllPostsRequest) returns (QueryAllPostsResponse);
+  rpc PostComments(QueryPostCommentsRequest) returns (QueryPostCommentsResponse);
 }
 
 message QueryAllPostsRequest {
@@ -17,6 +18,17 @@ message QueryAllPostsRequest {
 
 message QueryAllPostsResponse {
   repeated Post posts = 1;
+
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryPostCommentsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+  string slug = 2;
+}
+
+message QueryPostCommentsResponse {
+  repeated Comment comments = 1;
 
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

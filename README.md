@@ -16,6 +16,8 @@ Concretely, we would like to see the following components added:
 - The addition of a new `AllComments` gRPC query method. This method's input should take a `post_slug` (a string), and returns all the comments on a post.
 - The addition of two CLI subcommands, `tx create-comment` and `query list-comments`, which call the `CreateComment` and `AllComments` service methods under the hood.
 
+See solution steps in [SOLUTION.md](SOLUTION.md)
+
 ## Requirements:
 
 - Go v1.17+: https://golang.org/
