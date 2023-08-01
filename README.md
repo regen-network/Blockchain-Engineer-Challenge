@@ -86,3 +86,8 @@ The entire task should only take 2-3 hours, but you’re free to take it as far 
 With this take home task we would like to understand how you tackle tasks like the above. In order for us to easier understand what your reasoning for certain decisions is, please make sure to write good code comments and documentation and maintain a proper Git history with commit messages explaining each step.
 
 Feel free to include a list of ideas on how to improve your final project under the assumption that you have unlimited time and resources to spend on it.
+
+### CosmosSDK 0.45 Documentation 
+  In official cosmos website does not have documentation for 0.44 
+  Steps described for 0.45 will work for 0.44 also: 
+  https://docs.cosmos.network/v0.45/run-node/keyring.html
