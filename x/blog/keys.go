@@ -4,7 +4,8 @@ const (
 	ModuleName = "blog"
 	StoreKey   = ModuleName
 
-	PostKey = "post"
+	PostKey        = "post"
+	PostCommentKey = "post_comment"
 )
 
 func KeyPrefix(p string) []byte {
