@@ -22,6 +22,7 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdCreatePost())
+	cmd.AddCommand(CmdCreateComment())
 
 	return cmd
 }
