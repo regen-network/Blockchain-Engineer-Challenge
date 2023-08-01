@@ -3,8 +3,6 @@ package cli
 import (
 	"fmt"
 
-	// "strings"
-
 	"github.com/regen-network/bec/x/blog"
 	"github.com/spf13/cobra"
 
@@ -24,6 +22,7 @@ func GetQueryCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(CmdAllPosts())
+	cmd.AddCommand(CmdAllPostComments())
 
 	return cmd
 }
@@ -50,6 +49,46 @@ func CmdAllPosts() *cobra.Command {
 			}
 
 			res, err := queryClient.AllPosts(cmd.Context(), params)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "blog")
+
+	return cmd
+}
+
+func CmdAllPostComments() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "list-comments [post_slug]",
+		Short: "list all comments by post",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			argsPostSlug := string(args[0])
+
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			queryClient := blog.NewQueryClient(clientCtx)
+
+			params := &blog.QueryAllPostCommentsRequest{
+				Pagination: pageReq,
+				PostSlug:   argsPostSlug,
+			}
+
+			res, err := queryClient.AllPostComments(cmd.Context(), params)
 			if err != nil {
 				return err
 			}
