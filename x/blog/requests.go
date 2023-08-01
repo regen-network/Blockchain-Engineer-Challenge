@@ -7,6 +7,7 @@ import (
 
 var (
 	_ sdk.Msg = &MsgCreatePost{}
+	_ sdk.Msg = &MsgCreatePostComment{}
 )
 
 func (m *MsgCreatePost) ValidateBasic() error {
@@ -27,6 +28,29 @@ func (m *MsgCreatePost) ValidateBasic() error {
 }
 
 func (m *MsgCreatePost) GetSigners() []sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(m.Author)
+	if err != nil {
+		panic(err)
+	}
+
+	return []sdk.AccAddress{addr}
+}
+
+func (m *MsgCreatePostComment) ValidateBasic() error {
+	if m.Author == "" {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no author")
+	}
+	if m.Body == "" {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no body")
+	}
+	if m.Slug == "" {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no slug")
+	}
+
+	return nil
+}
+
+func (m *MsgCreatePostComment) GetSigners() []sdk.AccAddress {
 	addr, err := sdk.AccAddressFromBech32(m.Author)
 	if err != nil {
 		panic(err)
