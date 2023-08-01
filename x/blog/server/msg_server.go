@@ -38,3 +38,36 @@ func (s serverImpl) CreatePost(goCtx context.Context, request *blog.MsgCreatePos
 
 	return &blog.MsgCreatePostResponse{}, nil
 }
+
+func (s serverImpl) CreatePostComment(goCtx context.Context, request *blog.MsgCreatePostComment) (*blog.MsgCreatePostCommentResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	commentStore := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.PostCommentKey))
+	postStore := prefix.NewStore(ctx.KVStore(s.storeKey), blog.KeyPrefix(blog.PostKey))
+
+	// check if the post exists
+	if !postStore.Has([]byte(request.Slug)) {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "slug %s is found n 'post' storage", request.Slug)
+	}
+
+	comment := blog.PostComment{
+		Author: request.Author,
+		Slug:   request.Slug,
+		Body:   request.Body,
+	}
+
+	bComment, err := s.cdc.Marshal(&comment)
+	if err != nil {
+		return nil, err
+	}
+
+	// For key we can use body + author + slug
+	// explain: if the author write several similar message for one post comment will have no value
+	// In my opinion it's best solution for comment key
+	// Also we can try to generate some key, like UUID or something and for sure it's also will be working solution
+	key := []byte(request.Body + request.Author + request.Slug)
+
+	commentStore.Set(key, bComment)
+
+	return &blog.MsgCreatePostCommentResponse{}, nil
+}
